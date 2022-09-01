@@ -12,8 +12,8 @@ class Server():
          doc='/docs')
         self.app.register_blueprint(self.blueprint)
 
-
-        self.app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:201019@localhost:3306/api_produtos'
+        self.app.config['SQLALCHEMY_DATABASE_URI']='postgresql://glqlulliosqsci:56b2644bd6dfd4bcb17e8de2bac1b11154bf6739c46b00de1a7f8c347375c766@ec2-44-207-126-176.compute-1.amazonaws.com:5432/d6hdqr5u742pmj'
+        #self.app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:201019@localhost:3306/api_produtos'
         self.app.config['PROPAGATE_EXCEPTIONS'] = True
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

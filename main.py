@@ -231,6 +231,7 @@ def produto_delete(id):
 
 
 
+#Método para simplificar as responses
 def gera_response(status, nome_do_conteudo, conteudo, mensagem=False):
     body = {}
     body[nome_do_conteudo] = conteudo

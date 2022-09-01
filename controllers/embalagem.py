@@ -3,13 +3,15 @@ from flask_restx import Resource, fields
 
 
 from db import db
-from models.models import EmbalagemModel
+from models.embalagem import EmbalagemModel
 from server.instance import server
 
 from gera_response import gera_response
 
 embalagem_ns = server.embalagem_ns
 
+
+'''======================================== Embalagens ======================================================='''
 #Esboço para o método post da API
 embalagem = embalagem_ns.model('Embalagem', {
     'sigla': fields.String(description= 'Sigla da embalagem. "UN" "PCT"'),
@@ -17,36 +19,17 @@ embalagem = embalagem_ns.model('Embalagem', {
 })
 
 
-'''======================================== Embalagens ======================================================='''
-class Embalagem(Resource):
-    #Fazendo página index para retornar todas as embalagens
-    def get_all():
-        embalagem_objetos = EmbalagemModel.query.all()
-        embalagem_json = [embalagem.to_json() for embalagem in embalagem_objetos]
-        return gera_response(200, 'embalagem', embalagem_json)
+class EmbalagemList(Resource):
 
     # Selecionar Individual
-    def get_id(id):
+    def get(self, id):
             embalagem_objeto = EmbalagemModel.query.filter_by(id=id).first()
             embalagem_json = embalagem_objeto.to_json()
             return gera_response(200, "embalagem", embalagem_json)
 
-    @embalagem_ns.expect(embalagem)
-    @embalagem_ns.doc('Adicionar novo produto.')
-    def embalagem_post():
-        body = request.get_json()
-
-        try:
-            embalagem = EmbalagemModel(sigla=body['sigla'], descricao=body['descricao'])
-            db.session.add(embalagem)
-            db.session.commit()
-            return gera_response(201, 'embalagem ', embalagem.to_json(), ' adicionada.')
-        except Exception as e:
-            print(e)
-            return gera_response(400, 'erro')
-
     # Atualizar
-    def put(id):
+    @embalagem_ns.expect(embalagem)
+    def put(self, id):
         embalagem_objeto = EmbalagemModel.query.filter_by(id=id).first()
         body = request.get_json()
 
@@ -62,9 +45,9 @@ class Embalagem(Resource):
         except Exception as e:
             print('Erro', e)
             return gera_response(400, "Embalagem", {}, "Erro ao atualizar")
-
-    # Deletar
-    def delete(id):
+    
+ # Deletar
+    def delete(self, id):
         embalagem_objeto = EmbalagemModel.query.filter_by(id=id).first()
 
         try:
@@ -74,3 +57,28 @@ class Embalagem(Resource):
         except Exception as e:
             print('Erro', e)
             return gera_response(400, "embalagem", {}, "Erro ao deletar")
+
+
+class Embalagem(Resource):
+    #Fazendo página index para retornar todas as embalagens
+    def get(self):
+        embalagem_objetos = EmbalagemModel.query.all()
+        embalagem_json = [embalagem.to_json() for embalagem in embalagem_objetos]
+        return gera_response(200, 'embalagem', embalagem_json)
+
+
+    @embalagem_ns.expect(embalagem)
+    @embalagem_ns.doc('Adicionar novo produto.')
+    def post(self):
+        body = request.get_json()
+
+        try:
+            embalagem = EmbalagemModel(sigla=body['sigla'], descricao=body['descricao'])
+            db.session.add(embalagem)
+            db.session.commit()
+            return gera_response(201, 'embalagem ', embalagem.to_json(), ' adicionada.')
+        except Exception as e:
+            print(e)
+            return gera_response(400, 'erro')
+
+   

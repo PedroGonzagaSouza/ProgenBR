@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class Embalagem(db.Model):
     __tablename__ = 'Embalagens'
     id = db.Column(db.Integer(), primary_key=True)
-    sigla = db.Column(db.String(5), nullable=False, unique=True)
+    sigla = db.Column(db.String(5), nullable=False)
     descricao = db.Column(db.String(200))
 
 
@@ -50,7 +50,7 @@ class Embalagem(db.Model):
 class Produto(db.Model):
     __tablename__ = 'Produtos'
     id = db.Column(db.Integer(), primary_key=True)
-    nome = db.Column(db.String(100), nullable=False, unique=True)
+    nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(100), nullable=False)
     custo = db.Column(db.Float(), nullable=False)
     preco_venda = db.Column(db.Float(), nullable=False)
